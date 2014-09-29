@@ -1,5 +1,6 @@
 <%@page contentType='text/html' pageEncoding='UTF-8' session='false'%>
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
+<%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
 <!doctype html>
 <html lang='nl'>
 <head>
@@ -33,9 +34,53 @@
 		</ul>
 	</nav>
 	<h1>Filiaal toevoegen</h1>
-	Hier komen later de invoervelden van het filiaal ...
-	<form method='post' action='<c:url value="/filialen"/>'>
-		<input type='submit' value='Toevoegen'>
-	</form>
+	<c:url value='/filialen' var='url' />
+	<form:form action='${url}' commandName='filiaal' id='toevoegform'>
+		<form:label path='naam'>Naam:<form:errors path='naam' />
+		</form:label>
+		<form:input path='naam' autofocus='autofocus' required='true' />
+		<br>
+		<form:label path='adres.straat'>Straat:
+			<form:errors path='adres.straat' />
+		</form:label>
+		<form:input path='adres.straat' required='true' />
+		<br>
+		<form:label path='adres.huisNr'>Huisnr.:
+			<form:errors path='adres.huisNr' />
+		</form:label>
+		<form:input path='adres.huisNr' required='true' />
+		<br>
+		<form:label path='adres.postcode'>Postcode:
+			<form:errors path='adres.postcode' />
+		</form:label>
+		<form:input path='adres.postcode' required='true' type='number'
+			min='1000' max='9999' />
+			<br>
+		<form:label path='adres.gemeente'>Gemeente:
+			<form:errors path='adres.gemeente' />
+		</form:label>
+		<form:input path='adres.gemeente' required='true' />
+		<br>
+		<form:label path='inGebruikName'>Ingebruikname:
+			<form:errors path='inGebruikName' />
+		</form:label>
+		<form:input path='inGebruikName' required='true' />
+		<br>
+		<form:label path='waardeGebouw'>Waarde gebouw:
+			<form:errors path='waardeGebouw' />
+		</form:label>
+		<form:input path='waardeGebouw' required='true' />
+		<br>
+		<div class='rij'>
+			<form:checkbox path='hoofdFiliaal' label='Hoofdfiliaal' />
+		</div>
+		<br>
+		<input type='submit' value='Toevoegen' id='toevoegknop'>
+	</form:form>
+	<script>
+		document.getElementById('toevoegform').onsubmit = function() {
+			document.getElementById('toevoegknop').disabled = true;
+		};
+	</script>
 </body>
 </html>
