@@ -1,11 +1,13 @@
 package be.vdab.valueobjects;
 
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import be.vdab.constraints.Postcode;
 
+@Embeddable
 public class Adres {
 	@NotBlank
 	private String straat;

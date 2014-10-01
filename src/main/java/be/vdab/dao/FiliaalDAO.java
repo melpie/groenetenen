@@ -1,15 +1,13 @@
 package be.vdab.dao;
 
-import be.vdab.entities.Filiaal;
-import be.vdab.valueobjects.PostcodeReeks;
+import java.util.List;
 
-public interface FiliaalDAO {
-	void create(Filiaal filiaal);
-	Filiaal read(long id);
-	void update(Filiaal filiaal);
-	void delete(long id);
-	Iterable<Filiaal> findAll();
-	long findAantalFilialen();
-	long findAantalWerknemers(long id);
-	Iterable<Filiaal> findByPostcodeReeks(PostcodeReeks reeks);
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import be.vdab.entities.Filiaal;
+
+public interface FiliaalDAO extends JpaRepository<Filiaal, Long> {
+	
+	public List<Filiaal> findByAdresPostcodeBetweenOrderByNaamAsc(int van, int tot);
+
 }

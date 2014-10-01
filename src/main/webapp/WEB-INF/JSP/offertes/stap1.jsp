@@ -1,5 +1,6 @@
 <%@page contentType='text/html' pageEncoding='UTF-8' session='false'%>
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
+<%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
 <!doctype html>
 <html lang='nl'>
 <head>
@@ -34,10 +35,21 @@
 	</nav>
 	<h1>Aanvraag offerte</h1>
 	<h2>Stap 1</h2>
-	<form method='post' action="<c:url value='/offertes'/>">
-		<div>Hier vraag je later de voornaam, familienaam en e-mail
-			adres</div>
+	<c:url value='/offertes' var='url' />
+	<form:form action='${url}' commandName='offerte'>
+		<form:label path='voornaam'>Voornaam:<form:errors
+				path='voornaam' />
+		</form:label>
+		<form:input path='voornaam' autofocus='true' required='true' />
+		<form:label path='familienaam'>Familienaam:
+<form:errors path='familienaam' />
+		</form:label>
+		<form:input path='familienaam' required='true' />
+		<form:label path='emailAdres'>E-mail adres:
+<form:errors path='emailAdres' />
+		</form:label>
+		<form:input path='emailAdres' required='true' type='email' />
 		<input type='submit' value='Volgende stap' name='van1naar2'>
-	</form>
+	</form:form>
 </body>
 </html>

@@ -38,7 +38,7 @@
 	<spring:url value='/filialen/{id}' var='url'>
 		<spring:param name='id' value='${filiaal.id}' />
 	</spring:url>
-	<form:form action='${url}' commandName='filiaal'>
+	<form:form action='${url}' method='put' commandName='filiaal'>
 		<form:label path='naam'>Naam:<form:errors path='naam' />
 		</form:label>
 		<form:input path='naam' autofocus='autofocus' required='true' />

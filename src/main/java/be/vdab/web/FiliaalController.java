@@ -3,6 +3,7 @@ package be.vdab.web;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,7 @@ import be.vdab.services.FiliaalService;
 import be.vdab.valueobjects.PostcodeReeks;
 
 @Controller
-@RequestMapping("/filialen")
+@RequestMapping(value = "/filialen", produces = MediaType.TEXT_HTML_VALUE)
 class FiliaalController {
 	private static final String FILIALEN_VIEW = "filialen/filialen";
 	private static final String TOEVOEGEN_VIEW = "filialen/toevoegen";
@@ -49,7 +50,7 @@ class FiliaalController {
 		return new ModelAndView(WIJZIGEN_VIEW, "filiaal", filiaal);
 	}
 
-	@RequestMapping(value = "{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	String update(@Valid Filiaal filiaal, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return WIJZIGEN_VIEW;
@@ -105,7 +106,7 @@ class FiliaalController {
 				filiaalService.read(id));
 	}
 
-	@RequestMapping(value = "{id}/verwijderen", method = RequestMethod.POST)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	String delete(@PathVariable long id, RedirectAttributes redirectAttributes) {
 		Filiaal filiaal = filiaalService.read(id);
 		if (filiaal == null) {

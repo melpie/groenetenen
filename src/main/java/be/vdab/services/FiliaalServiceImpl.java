@@ -1,16 +1,17 @@
 package be.vdab.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import be.vdab.dao.FiliaalDAO;
 import be.vdab.entities.Filiaal;
 import be.vdab.exceptions.FiliaalHeeftNogWerknemersException;
 import be.vdab.valueobjects.PostcodeReeks;
 
-// enkele imports ...
 @Service
-// met deze annotation maak je een Spring bean van deze class
+@Transactional(readOnly = true)
 class FiliaalServiceImpl implements FiliaalService {
 	private final FiliaalDAO filiaalDAO;
 
@@ -21,41 +22,47 @@ class FiliaalServiceImpl implements FiliaalService {
 		this.filiaalDAO = filiaalDAO;
 	}
 
+	@Transactional(readOnly = false)
 	@Override
 	public void create(Filiaal filiaal) {
-		filiaalDAO.create(filiaal);
+		filiaalDAO.save(filiaal);
 	}
 
 	@Override
 	public Filiaal read(long id) {
-		return filiaalDAO.read(id);
+		return filiaalDAO.findOne(id);
 	}
 
+	@Transactional(readOnly = false)
 	@Override
 	public void update(Filiaal filiaal) {
-		filiaalDAO.update(filiaal);
+		filiaalDAO.save(filiaal);
 	}
 
+	@Transactional(readOnly = false)
 	@Override
 	public void delete(long id) {
-		if (filiaalDAO.findAantalWerknemers(id) != 0) {
-			throw new FiliaalHeeftNogWerknemersException();
+		Filiaal filiaal = filiaalDAO.findOne(id);
+		if (filiaal != null) {
+			if (!filiaal.getWerknemers().isEmpty()) {
+				throw new FiliaalHeeftNogWerknemersException();
+			}
+			filiaalDAO.delete(id);
 		}
-		filiaalDAO.delete(id);
 	}
 
 	@Override
 	public Iterable<Filiaal> findAll() {
-		return filiaalDAO.findAll();
+		return filiaalDAO.findAll(new Sort("naam"));
 	}
 
 	@Override
 	public long findAantalFilialen() {
-		return filiaalDAO.findAantalFilialen();
+		return filiaalDAO.count();
 	}
 
 	@Override
 	public Iterable<Filiaal> findByPostcodeReeks(PostcodeReeks reeks) {
-		return filiaalDAO.findByPostcodeReeks(reeks);
+		return filiaalDAO.findByAdresPostcodeBetweenOrderByNaamAsc(reeks.getVanpostcode(), reeks.getTotpostcode());
 	}
 }
